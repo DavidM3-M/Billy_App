@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/inicioFragment">
+
+    <fragment
+        android:id="@+id/inicioFragment"
+        android:name="com.example.billy_app.InicioFragment"
+        android:label="InicioFragment" >
+        <action
+            android:id="@+id/action_inicioFragment_to_ingresosFragment"
+            app:destination="@id/ingresosFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/bounce_interpolator"
+            app:popExitAnim="@android:anim/bounce_interpolator" />
+        <action
+            android:id="@+id/action_inicioFragment_to_gastosFragment"
+            app:destination="@id/gastosFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/bounce_interpolator"
+            app:popExitAnim="@android:anim/bounce_interpolator" />
+    </fragment>
+    <fragment
+        android:id="@+id/ingresosFragment"
+        android:name="com.example.billy_app.IngresosFragment"
+        android:label="fragment_ingresos"
+        tools:layout="@layout/fragment_ingresos" >
+        <action
+            android:id="@+id/action_ingresosFragment_to_inicioFragment"
+            app:destination="@id/inicioFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/bounce_interpolator"
+            app:popExitAnim="@android:anim/bounce_interpolator" />
+        <action
+            android:id="@+id/action_ingresosFragment_to_crearIngresoFragment"
+            app:destination="@id/crearIngresoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gastosFragment"
+        android:name="com.example.billy_app.GastosFragment"
+        android:label="fragment_gastos"
+        tools:layout="@layout/fragment_gastos" >
+        <action
+            android:id="@+id/action_gastosFragment_to_inicioFragment"
+            app:destination="@id/inicioFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/bounce_interpolator"
+            app:popExitAnim="@android:anim/bounce_interpolator" />
+        <action
+            android:id="@+id/action_gastosFragment_to_crearGastoFragment"
+            app:destination="@id/crearGastoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/crearIngresoFragment"
+        app:destination="@id/crearIngresoFragment"
+        android:name="com.example.billy_app.CrearIngresoFragment"
+        android:label="fragment_crear_ingreso"
+        tools:layout="@layout/fragment_crear_ingreso" />
+        <action
+            android:id="@+id/action_crearIngresoFragment_to_inicioFragment"
+            app:destination="@id/ingresosFragment"/>
+
+    <fragment
+        android:id="@+id/crearGastoFragment"
+        app:destination="@id/crearGastoFragment"
+        android:name="com.example.billy_app.CrearGastoFragment"
+        android:label="fragment_crear_gasto"
+        tools:layout="@layout/fragment_crear_gasto" />
+        <action
+            android:id="@+id/action_crearGastoFragment_to_inicioFragment"
+            app:destination="@id/gastosFragment"/>
+
+</navigation>
