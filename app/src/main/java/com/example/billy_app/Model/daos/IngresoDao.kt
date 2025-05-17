@@ -22,7 +22,7 @@ interface IngresoDao {
     suspend fun deleteIngreso(ingreso: Ingreso)
 
     @Query("SELECT * FROM ingreso")
-    fun getAllIngresos(): LiveData<Array<Ingreso>>
+    fun getAllIngresos(): LiveData<List<Ingreso>>
 
     @Query("SELECT * FROM ingreso WHERE id = :id")
     fun getByIdIngresos(id: Int): Flow<Ingreso>

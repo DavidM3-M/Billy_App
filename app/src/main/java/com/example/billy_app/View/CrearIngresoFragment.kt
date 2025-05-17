@@ -8,38 +8,32 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.billy_app.Model.entities.Ingreso // Cambio de entidad
 import com.example.billy_app.R
-import com.example.billy_app.ViewModel.IngresoViewModel
-import com.example.billy_app.Model.entities.Ingreso
 import com.example.billy_app.ValidationUtils
+import com.example.billy_app.ViewModel.IngresoViewModel // Cambio de ViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
+class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
 
-class CrearIngresoFragment : Fragment() {
-    private val viewModel: IngresoViewModel by viewModels()
+    private val viewModel: IngresoViewModel by viewModels() // Cambio de ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val root = inflater.inflate(R.layout.fragment_crear_ingreso, container, false)
+        val root = inflater.inflate(R.layout.fragment_crear_ingreso, container, false) // Cambio de layout
 
         val btnVolver = root.findViewById<MaterialButton>(R.id.btnVolverInicio)
-        val btnGuardar = root.findViewById<MaterialButton>(R.id.btnCrearIngreso)
+        val btnGuardar = root.findViewById<MaterialButton>(R.id.btnCrearIngreso) // Cambio de ID
 
-        val inputMonto = root.findViewById<TextInputLayout>(R.id.inputMonto)
-        val edtMonto = root.findViewById<TextInputEditText>(R.id.ed_monto_ingreso)
-
-        val inputFecha = root.findViewById<TextInputLayout>(R.id.inputFecha)
-        val edtFecha = root.findViewById<TextInputEditText>(R.id.ed_fecha_ingreso)
-
-        val inputDescripcion = root.findViewById<TextInputLayout>(R.id.inputDescripcion)
-        val edtDescripcion = root.findViewById<TextInputEditText>(R.id.ed_descripcion_ingreso)
+        val edtMonto = root.findViewById<TextInputEditText>(R.id.ed_monto_ingreso) // Cambio de ID
+        val edtFecha = root.findViewById<TextInputEditText>(R.id.ed_fecha_ingreso) // Cambio de ID
+        val edtDescripcion = root.findViewById<TextInputEditText>(R.id.ed_descripcion_ingreso) // Cambio de ID
 
         btnVolver.setOnClickListener {
-            findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment)
+            findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment) // Cambio en la navegación
         }
 
         btnGuardar.setOnClickListener {
@@ -49,9 +43,7 @@ class CrearIngresoFragment : Fragment() {
         return root
     }
 
-    private fun guardarIngreso(
-        edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText
-    ) {
+    private fun guardarIngreso(edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText) {
         val monto = edtMonto.text.toString().toDoubleOrNull() ?: 0.0
         val fecha = edtFecha.text.toString()
         val descripcion = edtDescripcion.text.toString()
@@ -63,10 +55,8 @@ class CrearIngresoFragment : Fragment() {
             return
         }
 
-        val nuevoIngreso = Ingreso(monto = monto, fecha = fecha, descripcion = descripcion)
-        viewModel.guardarIngreso(nuevoIngreso)
+        val nuevoIngreso = Ingreso(monto = monto, fecha = fecha, descripcion = descripcion) // Cambio de entidad
+        viewModel.guardarIngreso(nuevoIngreso) // Cambio de ViewModel
         Toast.makeText(requireContext(), "Ingreso guardado", Toast.LENGTH_SHORT).show()
     }
-
-
 }
