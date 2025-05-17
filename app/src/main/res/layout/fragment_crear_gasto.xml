@@ -34,6 +34,7 @@
             android:layout_marginTop="20dp">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputMonto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Monto del gasto"
@@ -41,6 +42,7 @@
                 app:boxBackgroundColor="#FFFFFF">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_monto_gasto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
@@ -48,6 +50,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputFecha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -56,6 +59,7 @@
                 app:boxBackgroundColor="#FFFFFF">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_fecha_gasto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
@@ -63,6 +67,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputDescripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -71,6 +76,7 @@
                 app:boxBackgroundColor="#FFFFFF">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ed_descripcion_gasto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
@@ -90,7 +96,7 @@
         android:layout_gravity="bottom">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegistrarGasto"
+            android:id="@+id/btnCrearGasto"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"

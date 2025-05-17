@@ -5,25 +5,60 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.billy_app.Model.entities.Gasto
 import com.example.billy_app.R
+import com.example.billy_app.ValidationUtils
+import com.example.billy_app.ViewModel.GastoViewModel
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+
 
 
 class CrearGastoFragment : Fragment() {
 
+    private val viewModel: GastoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val root = inflater.inflate(R.layout.fragment_crear_gasto, container, false)
+
         val btnVolver = root.findViewById<MaterialButton>(R.id.btnVolverInicio)
-        //val btnAgregarGasto = root.findViewById<MaterialButton>(R.id.btnAgregarGasto)
+        val btnGuardar = root.findViewById<MaterialButton>(R.id.btnCrearGasto)
+
+        val edtMonto = root.findViewById<TextInputEditText>(R.id.ed_monto_gasto)
+        val edtFecha = root.findViewById<TextInputEditText>(R.id.ed_fecha_gasto)
+        val edtDescripcion = root.findViewById<TextInputEditText>(R.id.ed_descripcion_gasto)
+
         btnVolver.setOnClickListener {
             findNavController().navigate(R.id.action_crearGastoFragment_to_inicioFragment)
         }
 
+        btnGuardar.setOnClickListener {
+            guardarGasto(edtMonto, edtFecha, edtDescripcion)
+        }
+
         return root
+    }
+
+    private fun guardarGasto(edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText) {
+        val monto = edtMonto.text.toString().toDoubleOrNull() ?: 0.0
+        val fecha = edtFecha.text.toString()
+        val descripcion = edtDescripcion.text.toString()
+
+        val mensajeError = ValidationUtils.validarCampos(monto, fecha, descripcion)
+
+        if (mensajeError != null) {
+            Toast.makeText(requireContext(), mensajeError, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val nuevoGasto = Gasto(monto = monto, fecha = fecha, descripcion = descripcion)
+        viewModel.guardarGasto(nuevoGasto)
+        Toast.makeText(requireContext(), "Gasto guardado", Toast.LENGTH_SHORT).show()
     }
 }

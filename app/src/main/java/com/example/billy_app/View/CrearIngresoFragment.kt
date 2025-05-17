@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.billy_app.R
 import com.example.billy_app.ViewModel.IngresoViewModel
 import com.example.billy_app.Model.entities.Ingreso
+import com.example.billy_app.ValidationUtils
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -42,55 +43,30 @@ class CrearIngresoFragment : Fragment() {
         }
 
         btnGuardar.setOnClickListener {
-            guardarIngreso(edtMonto, edtFecha, edtDescripcion, inputMonto, inputFecha, inputDescripcion)
+            guardarIngreso(edtMonto, edtFecha, edtDescripcion)
         }
 
         return root
     }
 
     private fun guardarIngreso(
-        edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText,
-        inputMonto: TextInputLayout, inputFecha: TextInputLayout, inputDescripcion: TextInputLayout
+        edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText
     ) {
         val monto = edtMonto.text.toString().toDoubleOrNull() ?: 0.0
         val fecha = edtFecha.text.toString()
         val descripcion = edtDescripcion.text.toString()
 
-        if (validarCampos(monto, fecha, descripcion, inputMonto, inputFecha, inputDescripcion)) {
-            val nuevoIngreso = Ingreso(monto = monto, fecha = fecha, descripcion = descripcion)
-            viewModel.guardarIngreso(nuevoIngreso)
-            Toast.makeText(requireContext(), "Ingreso guardado", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment)
+        val mensajeError = ValidationUtils.validarCampos(monto, fecha, descripcion)
+
+        if (mensajeError != null) {
+            Toast.makeText(requireContext(), mensajeError, Toast.LENGTH_SHORT).show()
+            return
         }
+
+        val nuevoIngreso = Ingreso(monto = monto, fecha = fecha, descripcion = descripcion)
+        viewModel.guardarIngreso(nuevoIngreso)
+        Toast.makeText(requireContext(), "Ingreso guardado", Toast.LENGTH_SHORT).show()
     }
 
-    private fun validarCampos(
-        monto: Double, fecha: String, descripcion: String,
-        inputMonto: TextInputLayout, inputFecha: TextInputLayout, inputDescripcion: TextInputLayout
-    ): Boolean {
-        var valido = true
 
-        if (monto <= 0) {
-            inputMonto.error = "El monto debe ser mayor a 0"
-            valido = false
-        } else {
-            inputMonto.error = null
-        }
-
-        if (fecha.isEmpty()) {
-            inputFecha.error = "Ingrese una fecha válida"
-            valido = false
-        } else {
-            inputFecha.error = null
-        }
-
-        if (descripcion.isEmpty()) {
-            inputDescripcion.error = "Ingrese una descripción"
-            valido = false
-        } else {
-            inputDescripcion.error = null
-        }
-
-        return valido
-    }
 }
