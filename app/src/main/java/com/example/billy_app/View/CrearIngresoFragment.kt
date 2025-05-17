@@ -58,19 +58,30 @@ class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
     }
 
     private fun guardarIngreso(edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText) {
-        val monto = edtMonto.text.toString().toDoubleOrNull() ?: 0.0
-        val fecha = edtFecha.text.toString()
-        val descripcion = edtDescripcion.text.toString()
+        val montoStr = edtMonto.text.toString().trim()
 
-        val mensajeError = ValidationUtils.validarCampos(monto, fecha, descripcion)
+        // ✅ Validación mejorada para evitar textos no numéricos
+        if (montoStr.isBlank() || montoStr.toDoubleOrNull() == null) {
+            Toast.makeText(requireContext(), "⚠️ El monto debe ser un número válido", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val monto = montoStr.toDouble()
+        val fecha = edtFecha.text.toString().trim()
+        val descripcion = edtDescripcion.text.toString().trim()
+
+        // ✅ Validar con `ValidationUtils`
+        val mensajeError = ValidationUtils.validarCampos(montoStr, fecha, descripcion, requireContext())
 
         if (mensajeError != null) {
             Toast.makeText(requireContext(), mensajeError, Toast.LENGTH_SHORT).show()
             return
         }
 
-        val nuevoIngreso = Ingreso(monto = monto, fecha = fecha, descripcion = descripcion) // Cambio de entidad
-        viewModel.guardarIngreso(nuevoIngreso) // Cambio de ViewModel
-        Toast.makeText(requireContext(), "Ingreso guardado", Toast.LENGTH_SHORT).show()
+        val nuevoIngreso = Ingreso(monto = monto, fecha = fecha, descripcion = descripcion)
+        viewModel.guardarIngreso(nuevoIngreso)
+        Toast.makeText(requireContext(), "✅ Ingreso guardado con éxito", Toast.LENGTH_SHORT).show()
+
+        findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment)
     }
 }

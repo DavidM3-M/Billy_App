@@ -58,11 +58,18 @@ class CrearGastoFragment : Fragment() {
     }
 
     private fun guardarGasto(edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText) {
-        val monto = edtMonto.text.toString().toDoubleOrNull() ?: 0.0
-        val fecha = edtFecha.text.toString()
-        val descripcion = edtDescripcion.text.toString()
+        val montoStr = edtMonto.text.toString().trim()
 
-        val mensajeError = ValidationUtils.validarCampos(monto, fecha, descripcion)
+        if (montoStr.isBlank() || montoStr.toDoubleOrNull() == null) {
+            Toast.makeText(requireContext(), "⚠️ El monto debe ser un número válido", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val monto = montoStr.toDouble()
+        val fecha = edtFecha.text.toString().trim()
+        val descripcion = edtDescripcion.text.toString().trim()
+
+        val mensajeError = ValidationUtils.validarCampos(montoStr, fecha, descripcion, requireContext())
 
         if (mensajeError != null) {
             Toast.makeText(requireContext(), mensajeError, Toast.LENGTH_SHORT).show()
@@ -71,6 +78,8 @@ class CrearGastoFragment : Fragment() {
 
         val nuevoGasto = Gasto(monto = monto, fecha = fecha, descripcion = descripcion)
         viewModel.guardarGasto(nuevoGasto)
-        Toast.makeText(requireContext(), "Gasto guardado", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "✅ Gasto guardado con éxito", Toast.LENGTH_SHORT).show()
+
+        findNavController().navigate(R.id.action_crearGastoFragment_to_inicioFragment)
     }
 }
