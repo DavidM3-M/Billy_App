@@ -15,6 +15,5 @@ class MainActivity : AppCompatActivity() {
 
         base = BillyDataBase.getDatabase(applicationContext)
 
-
     }
 }

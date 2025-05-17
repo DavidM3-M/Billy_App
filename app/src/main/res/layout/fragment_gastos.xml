@@ -1,39 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".View.GastosFragment"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".View.GastosFragment">
 
+    <!-- Contenedor principal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="bottom"
-        android:layout_margin="16dp"
-        android:layout_gravity="bottom"> <!-- Asegura que queden abajo -->
+        android:padding="16dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAgregarGasto"
+        <!-- RecyclerView para mostrar los gastos -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerGastos"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="8dp"/>
+
+        <!-- Contenedor de botones centrado -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Agregar gasto"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#00796B"
-            app:cornerRadius="15dp"
-            android:layout_marginBottom="8dp"/> <!-- Separación entre botones -->
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnVolverInicio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Volver al inicio"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#4CAF50"
-            app:cornerRadius="15dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAgregarGasto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agregar gasto"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#00796B"
+                app:cornerRadius="15dp"
+                android:layout_marginBottom="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVolverInicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Volver al inicio"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#4CAF50"
+                app:cornerRadius="15dp"/>
+        </LinearLayout>
     </LinearLayout>
-
 </FrameLayout>
