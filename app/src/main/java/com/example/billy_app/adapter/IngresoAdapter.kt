@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.DecelerateInterpolator
 import androidx.recyclerview.widget.RecyclerView
-import com.example.billy_app.EditarIngresoDialog // Ajustar si es necesario
+import com.example.billy_app.Dialogs.EditarIngresoDialog // Ajustar si es necesario
 import com.example.billy_app.Model.entities.Ingreso // Cambio de entidad
 import com.example.billy_app.R
 import com.example.billy_app.ViewModel.IngresoViewModel

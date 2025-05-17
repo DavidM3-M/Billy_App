@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.billy_app.Model.entities.Gasto
 import com.example.billy_app.R
-import com.example.billy_app.ValidationUtils
+import com.example.billy_app.Validations.ValidationUtils
 import com.example.billy_app.ViewModel.GastoViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText

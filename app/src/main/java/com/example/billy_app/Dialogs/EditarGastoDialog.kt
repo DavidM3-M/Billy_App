@@ -1,35 +1,36 @@
-package com.example.billy_app
+package com.example.billy_app.Dialogs
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.example.billy_app.Model.entities.Ingreso // Cambio de entidad
+import com.example.billy_app.Model.entities.Gasto
+import com.example.billy_app.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.util.Calendar
 
-class EditarIngresoDialog(
-    private val ingreso: Ingreso,
-    private val listener: (Ingreso) -> Unit
+class EditarGastoDialog(
+    private val gasto: Gasto,
+    private val listener: (Gasto) -> Unit
 ) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireContext())
         val inflater = requireActivity().layoutInflater
-        val view = inflater.inflate(R.layout.dialog_editar_ingreso, null)
+        val view = inflater.inflate(R.layout.dialog_editar_gasto, null)
 
-        val inputMonto = view.findViewById<TextInputEditText>(R.id.inputMontoIngreso)
-        val inputDescripcion = view.findViewById<TextInputEditText>(R.id.inputDescripcionIngreso)
-        val inputFecha = view.findViewById<TextInputEditText>(R.id.inputFechaIngreso)
+        val inputMonto = view.findViewById<TextInputEditText>(R.id.inputMonto)
+        val inputDescripcion = view.findViewById<TextInputEditText>(R.id.inputDescripcion)
+        val inputFecha = view.findViewById<TextInputEditText>(R.id.inputFecha)
         val btnGuardar = view.findViewById<MaterialButton>(R.id.btnGuardar)
         val btnCancelar = view.findViewById<MaterialButton>(R.id.btnCancelar)
 
         // ✅ Prellenar datos actuales
-        inputMonto.setText(ingreso.monto.toString())
-        inputDescripcion.setText(ingreso.descripcion)
-        inputFecha.setText(ingreso.fecha)
+        inputMonto.setText(gasto.monto.toString())
+        inputDescripcion.setText(gasto.descripcion)
+        inputFecha.setText(gasto.fecha)
 
         // ✅ Manejo de selección de fecha con `DatePickerDialog`
         inputFecha.setOnClickListener {
@@ -55,8 +56,8 @@ class EditarIngresoDialog(
                 descripcionEditada.isEmpty() -> inputDescripcion.error = "Ingrese una descripción"
                 fechaEditada.isEmpty() -> inputFecha.error = "Seleccione una fecha"
                 else -> {
-                    val nuevoIngreso = ingreso.copy(monto = montoEditado, descripcion = descripcionEditada, fecha = fechaEditada)
-                    listener(nuevoIngreso)
+                    val nuevoGasto = gasto.copy(monto = montoEditado, descripcion = descripcionEditada, fecha = fechaEditada)
+                    listener(nuevoGasto)
                     dismiss() // ✅ Cerrar el diálogo al guardar
                 }
             }

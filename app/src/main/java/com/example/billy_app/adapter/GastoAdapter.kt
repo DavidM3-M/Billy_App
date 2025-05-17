@@ -1,20 +1,12 @@
 package com.example.billy_app.adapter
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
-import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.DecelerateInterpolator
-import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.billy_app.EditarGastoDialog
+import com.example.billy_app.Dialogs.EditarGastoDialog
 import com.example.billy_app.Model.entities.Gasto
 import com.example.billy_app.R
 import com.example.billy_app.ViewModel.GastoViewModel
