@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/inicioFragment"
-        android:name="com.example.billy_app.InicioFragment"
+        android:name="com.example.billy_app.View.InicioFragment"
         android:label="InicioFragment" >
         <action
             android:id="@+id/action_inicioFragment_to_ingresosFragment"
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/ingresosFragment"
-        android:name="com.example.billy_app.IngresosFragment"
+        android:name="com.example.billy_app.View.IngresosFragment"
         android:label="fragment_ingresos"
         tools:layout="@layout/fragment_ingresos" >
         <action
@@ -38,12 +38,16 @@
             app:popExitAnim="@android:anim/bounce_interpolator" />
         <action
             android:id="@+id/action_ingresosFragment_to_crearIngresoFragment"
-            app:destination="@id/crearIngresoFragment" />
+            app:destination="@id/crearIngresoFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/bounce_interpolator"
+            app:popExitAnim="@android:anim/bounce_interpolator" />
     </fragment>
 
     <fragment
         android:id="@+id/gastosFragment"
-        android:name="com.example.billy_app.GastosFragment"
+        android:name="com.example.billy_app.View.GastosFragment"
         android:label="fragment_gastos"
         tools:layout="@layout/fragment_gastos" >
         <action
@@ -55,27 +59,39 @@
             app:popExitAnim="@android:anim/bounce_interpolator" />
         <action
             android:id="@+id/action_gastosFragment_to_crearGastoFragment"
-            app:destination="@id/crearGastoFragment" />
+            app:destination="@id/crearGastoFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/bounce_interpolator"
+            app:popExitAnim="@android:anim/bounce_interpolator" />
     </fragment>
 
     <fragment
         android:id="@+id/crearIngresoFragment"
         app:destination="@id/crearIngresoFragment"
-        android:name="com.example.billy_app.CrearIngresoFragment"
+        android:name="com.example.billy_app.View.CrearIngresoFragment"
         android:label="fragment_crear_ingreso"
         tools:layout="@layout/fragment_crear_ingreso" />
         <action
             android:id="@+id/action_crearIngresoFragment_to_inicioFragment"
-            app:destination="@id/ingresosFragment"/>
+            app:destination="@id/ingresosFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/bounce_interpolator"
+            app:popExitAnim="@android:anim/bounce_interpolator" />
 
     <fragment
         android:id="@+id/crearGastoFragment"
         app:destination="@id/crearGastoFragment"
-        android:name="com.example.billy_app.CrearGastoFragment"
+        android:name="com.example.billy_app.View.CrearGastoFragment"
         android:label="fragment_crear_gasto"
         tools:layout="@layout/fragment_crear_gasto" />
         <action
             android:id="@+id/action_crearGastoFragment_to_inicioFragment"
-            app:destination="@id/gastosFragment"/>
+            app:destination="@id/gastosFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/bounce_interpolator"
+            app:popExitAnim="@android:anim/bounce_interpolator" />
 
 </navigation>

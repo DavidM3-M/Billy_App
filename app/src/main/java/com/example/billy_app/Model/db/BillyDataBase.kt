@@ -1,13 +1,13 @@
-package com.example.billy_app.room.db
+package com.example.billy_app.Model.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.billy_app.room.daos.GastoDao
-import com.example.billy_app.room.daos.IngresoDao
-import com.example.billy_app.room.entities.Gasto
-import com.example.billy_app.room.entities.Ingreso
+import com.example.billy_app.Model.daos.GastoDao
+import com.example.billy_app.Model.daos.IngresoDao
+import com.example.billy_app.Model.entities.Gasto
+import com.example.billy_app.Model.entities.Ingreso
 
 @Database(entities = [Ingreso::class, Gasto::class], version = 1)
 

@@ -1,4 +1,4 @@
-package com.example.billy_app.room.daos
+package com.example.billy_app.Model.daos
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -6,7 +6,8 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.billy_app.room.entities.Ingreso
+import com.example.billy_app.Model.entities.Ingreso
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IngresoDao {
@@ -24,6 +25,6 @@ interface IngresoDao {
     fun getAllIngresos(): LiveData<Array<Ingreso>>
 
     @Query("SELECT * FROM ingreso WHERE id = :id")
-    fun getByIdIngresos(id: Int): LiveData<Ingreso>
+    fun getByIdIngresos(id: Int): Flow<Ingreso>
 
 }

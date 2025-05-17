@@ -1,4 +1,4 @@
-package com.example.billy_app
+package com.example.billy_app.View
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.billy_app.R
 import com.google.android.material.button.MaterialButton
 
 
