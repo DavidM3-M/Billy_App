@@ -17,8 +17,8 @@ import com.google.android.material.button.MaterialButton
 
 
 class IngresosFragment : Fragment() {
-    private val viewModel: IngresoViewModel by viewModels()
-    private lateinit var ingresosViewModel: IngresoViewModel
+
+    private val viewModel: IngresoViewModel by viewModels() // ✅ Se usa un solo ViewModel
     private lateinit var ingresoAdapter: IngresoAdapter
 
     override fun onCreateView(
@@ -33,15 +33,12 @@ class IngresosFragment : Fragment() {
 
         recyclerIngresos.layoutManager = LinearLayoutManager(requireContext())
 
-        // ✅ Inicializar ViewModel para ingresos
-        ingresosViewModel = ViewModelProvider(requireActivity()).get(IngresoViewModel::class.java)
-
-        // ✅ Inicializar `IngresoAdapter` correctamente con una lista vacía
-        ingresoAdapter = IngresoAdapter(mutableListOf())
+        // ✅ Inicializar `IngresoAdapter` correctamente PASANDO el ViewModel
+        ingresoAdapter = IngresoAdapter(mutableListOf(), viewModel)
         recyclerIngresos.adapter = ingresoAdapter
 
         // ✅ Observar cambios en los datos y actualizar el adaptador
-        ingresosViewModel.ingresos.observe(viewLifecycleOwner) { nuevosIngresos ->
+        viewModel.ingresos.observe(viewLifecycleOwner) { nuevosIngresos ->
             ingresoAdapter.actualizarLista(nuevosIngresos.toMutableList()) // Sincroniza UI con datos reales
         }
 
@@ -54,13 +51,5 @@ class IngresosFragment : Fragment() {
         }
 
         return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.obtenerIngresos().observe(viewLifecycleOwner) { ingresos ->
-            ingresoAdapter.actualizarLista(ingresos) // Ahora correctamente sobre el objeto
-        }
     }
 }

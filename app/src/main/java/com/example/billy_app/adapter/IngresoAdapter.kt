@@ -11,9 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.billy_app.EditarIngresoDialog // Ajustar si es necesario
 import com.example.billy_app.Model.entities.Ingreso // Cambio de entidad
 import com.example.billy_app.R
+import com.example.billy_app.ViewModel.IngresoViewModel
 import com.google.android.material.button.MaterialButton
 
-class IngresoAdapter(private var ingresos: MutableList<Ingreso>) : RecyclerView.Adapter<IngresoAdapter.ViewHolder>() {
+class IngresoAdapter(
+    private var ingresos: MutableList<Ingreso>,
+    private val viewModel: IngresoViewModel // ✅ Se pasa el ViewModel
+) : RecyclerView.Adapter<IngresoAdapter.ViewHolder>() {
 
     private var itemSeleccionado: Int = -1 // Índice del ítem expandido (-1 = ninguno)
 
@@ -36,7 +40,6 @@ class IngresoAdapter(private var ingresos: MutableList<Ingreso>) : RecyclerView.
         holder.txtFecha.text = ingreso.fecha
         holder.txtDescripcion.text = ingreso.descripcion
 
-        // Controlar visibilidad de los botones sin afectar animaciones
         holder.btnEditar.visibility = if (position == itemSeleccionado) View.VISIBLE else View.GONE
         holder.btnEliminar.visibility = if (position == itemSeleccionado) View.VISIBLE else View.GONE
 
@@ -48,20 +51,23 @@ class IngresoAdapter(private var ingresos: MutableList<Ingreso>) : RecyclerView.
             notifyItemChanged(position)
         }
 
-        // Configurar botón de eliminar
         holder.btnEliminar.setOnClickListener {
-            ingresos.removeAt(position)
+            viewModel.eliminarIngreso(ingreso) // 🗑 Elimina de la base de datos
+            ingresos.removeAt(position) // Elimina de la lista visual
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, ingresos.size)
         }
 
-        // Configurar botón de editar
         holder.btnEditar.setOnClickListener {
             val dialog = EditarIngresoDialog(ingreso) { nuevoIngreso ->
-                ingresos[position] = nuevoIngreso
-                notifyItemChanged(position)
+                viewModel.actualizarIngreso(nuevoIngreso) // ✅ Llamamos la función correcta
+                ingresos[position] = nuevoIngreso // ✅ Se actualiza en la lista de la UI
+                notifyItemChanged(position) // ✅ Refresca el `RecyclerView`
             }
-            dialog.show((holder.itemView.context as AppCompatActivity).supportFragmentManager, "EditarIngresoDialog")
+            dialog.show(
+                (holder.itemView.context as AppCompatActivity).supportFragmentManager,
+                "EditarIngresoDialog"
+            )
         }
     }
 
@@ -70,6 +76,6 @@ class IngresoAdapter(private var ingresos: MutableList<Ingreso>) : RecyclerView.
     fun actualizarLista(nuevosIngresos: List<Ingreso>) {
         ingresos.clear()
         ingresos.addAll(nuevosIngresos)
-        notifyDataSetChanged()
+        notifyDataSetChanged() // Refresca la lista
     }
 }

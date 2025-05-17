@@ -17,8 +17,8 @@ import com.google.android.material.button.MaterialButton
 
 
 class GastosFragment : Fragment() {
-    private val viewModel: GastoViewModel by viewModels()
-    private lateinit var gastosViewModel: GastoViewModel
+
+    private val viewModel: GastoViewModel by viewModels() // ✅ Se usa un solo ViewModel
     private lateinit var gastoAdapter: GastoAdapter
 
     override fun onCreateView(
@@ -33,15 +33,12 @@ class GastosFragment : Fragment() {
 
         recyclerGastos.layoutManager = LinearLayoutManager(requireContext())
 
-        // ✅ Inicializar ViewModel
-        gastosViewModel = ViewModelProvider(requireActivity()).get(GastoViewModel::class.java)
-
-        // ✅ Inicializar `GastoAdapter` correctamente con una lista vacía
-        gastoAdapter = GastoAdapter(mutableListOf())
+        // ✅ Inicializar `GastoAdapter` correctamente PASANDO el ViewModel
+        gastoAdapter = GastoAdapter(mutableListOf(), viewModel)
         recyclerGastos.adapter = gastoAdapter
 
         // ✅ Observar cambios en los datos y actualizar el adaptador
-        gastosViewModel.gastos.observe(viewLifecycleOwner) { nuevosGastos ->
+        viewModel.gastos.observe(viewLifecycleOwner) { nuevosGastos ->
             gastoAdapter.actualizarLista(nuevosGastos.toMutableList()) // Sincroniza UI con datos reales
         }
 
@@ -54,13 +51,5 @@ class GastosFragment : Fragment() {
         }
 
         return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.obtenerGastos().observe(viewLifecycleOwner) { gastos ->
-            gastoAdapter.actualizarLista(gastos) // Ahora correctamente sobre el objeto
-        }
     }
 }

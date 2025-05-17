@@ -10,58 +10,60 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.util.Calendar
 
-class EditarIngresoDialog(private val ingreso: Ingreso, private val listener: (Ingreso) -> Unit) : DialogFragment() {
+class EditarIngresoDialog(
+    private val ingreso: Ingreso,
+    private val listener: (Ingreso) -> Unit
+) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireContext())
         val inflater = requireActivity().layoutInflater
-        val view = inflater.inflate(R.layout.dialog_editar_ingreso, null) // Cambio de layout
+        val view = inflater.inflate(R.layout.dialog_editar_ingreso, null)
 
         val inputMonto = view.findViewById<TextInputEditText>(R.id.inputMontoIngreso)
         val inputDescripcion = view.findViewById<TextInputEditText>(R.id.inputDescripcionIngreso)
-        val inputFecha = view.findViewById<TextInputEditText>(R.id.inputFechaIngreso) // 🔥 Selección de fecha
-        val btnGuardar = view.findViewById<MaterialButton>(R.id.btnGuardarIngreso)
-        val btnCancelar = view.findViewById<MaterialButton>(R.id.btnCancelarIngreso)
+        val inputFecha = view.findViewById<TextInputEditText>(R.id.inputFechaIngreso)
+        val btnGuardar = view.findViewById<MaterialButton>(R.id.btnGuardar)
+        val btnCancelar = view.findViewById<MaterialButton>(R.id.btnCancelar)
 
+        // ✅ Prellenar datos actuales
         inputMonto.setText(ingreso.monto.toString())
         inputDescripcion.setText(ingreso.descripcion)
-        inputFecha.setText(ingreso.fecha) // Mostramos la fecha actual
+        inputFecha.setText(ingreso.fecha)
 
-        // 🔥 Manejo de selección de fecha con `DatePickerDialog`
+        // ✅ Manejo de selección de fecha con `DatePickerDialog`
         inputFecha.setOnClickListener {
             val calendario = Calendar.getInstance()
             val year = calendario.get(Calendar.YEAR)
             val month = calendario.get(Calendar.MONTH)
             val day = calendario.get(Calendar.DAY_OF_MONTH)
 
-            val datePicker = DatePickerDialog(requireContext(), { _, año, mes, día ->
-                val fechaSeleccionada = "$día/${mes + 1}/$año" // Formato simple
+            DatePickerDialog(requireContext(), { _, año, mes, día ->
+                val fechaSeleccionada = "$día/${mes + 1}/$año"
                 inputFecha.setText(fechaSeleccionada)
-            }, year, month, day)
-
-            datePicker.show()
+            }, year, month, day).show()
         }
 
-        // 🔥 Guardar cambios incluyendo la fecha seleccionada
+        // ✅ Guardar cambios con validaciones mejoradas
         btnGuardar.setOnClickListener {
             val montoEditado = inputMonto.text.toString().toDoubleOrNull()
-            val descripcionEditada = inputDescripcion.text.toString()
-            val fechaEditada = inputFecha.text.toString()
+            val descripcionEditada = inputDescripcion.text.toString().trim()
+            val fechaEditada = inputFecha.text.toString().trim()
 
-            if (montoEditado == null || montoEditado < 0) {
-                inputMonto.error = "Ingrese un monto válido"
-            } else if (descripcionEditada.isEmpty()) {
-                inputDescripcion.error = "Ingrese una descripción"
-            } else if (fechaEditada.isEmpty()) {
-                inputFecha.error = "Seleccione una fecha"
-            } else {
-                val nuevoIngreso = ingreso.copy(monto = montoEditado, descripcion = descripcionEditada, fecha = fechaEditada)
-                listener(nuevoIngreso)
-                dialog?.dismiss()
+            when {
+                montoEditado == null || montoEditado < 0 -> inputMonto.error = "Ingrese un monto válido"
+                descripcionEditada.isEmpty() -> inputDescripcion.error = "Ingrese una descripción"
+                fechaEditada.isEmpty() -> inputFecha.error = "Seleccione una fecha"
+                else -> {
+                    val nuevoIngreso = ingreso.copy(monto = montoEditado, descripcion = descripcionEditada, fecha = fechaEditada)
+                    listener(nuevoIngreso)
+                    dismiss() // ✅ Cerrar el diálogo al guardar
+                }
             }
         }
 
-        btnCancelar.setOnClickListener { dialog?.dismiss() }
+        // ✅ Cancelar sin cambios
+        btnCancelar.setOnClickListener { dismiss() }
 
         return builder.setView(view).create()
     }

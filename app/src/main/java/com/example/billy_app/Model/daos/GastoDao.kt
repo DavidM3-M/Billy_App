@@ -25,4 +25,9 @@ interface GastoDao {
 
     @Query("SELECT * FROM gasto WHERE id = :id")
     fun getByIdGasto(id: Int): LiveData<Gasto>
+
+    @Query("SELECT SUM(monto) FROM gasto")
+    fun getTotalGastos(): LiveData<Double>
+
+
 }

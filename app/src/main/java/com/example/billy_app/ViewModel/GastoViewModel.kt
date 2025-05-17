@@ -25,5 +25,10 @@ class GastoViewModel(application: Application) : AndroidViewModel(application) {
     fun actualizarGasto(gasto: Gasto) {
         viewModelScope.launch { dao.updateGasto(gasto) }
     }
-    fun obtenerGastos(): LiveData<List<Gasto>> = dao.getAllGastos()
+
+
+    fun obtenerTotalGastos(): LiveData<Double> {
+        return dao.getTotalGastos()
+    }
+
 }

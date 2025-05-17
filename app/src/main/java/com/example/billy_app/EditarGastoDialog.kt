@@ -11,7 +11,10 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.util.Calendar
 
-class EditarGastoDialog(private val gasto: Gasto, private val listener: (Gasto) -> Unit) : DialogFragment() {
+class EditarGastoDialog(
+    private val gasto: Gasto,
+    private val listener: (Gasto) -> Unit
+) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireContext())
@@ -20,49 +23,48 @@ class EditarGastoDialog(private val gasto: Gasto, private val listener: (Gasto) 
 
         val inputMonto = view.findViewById<TextInputEditText>(R.id.inputMonto)
         val inputDescripcion = view.findViewById<TextInputEditText>(R.id.inputDescripcion)
-        val inputFecha = view.findViewById<TextInputEditText>(R.id.inputFecha) // 🔥 Agregamos la fecha
+        val inputFecha = view.findViewById<TextInputEditText>(R.id.inputFecha)
         val btnGuardar = view.findViewById<MaterialButton>(R.id.btnGuardar)
         val btnCancelar = view.findViewById<MaterialButton>(R.id.btnCancelar)
 
+        // ✅ Prellenar datos actuales
         inputMonto.setText(gasto.monto.toString())
         inputDescripcion.setText(gasto.descripcion)
-        inputFecha.setText(gasto.fecha) // Mostramos la fecha actual
+        inputFecha.setText(gasto.fecha)
 
-        // 🔥 Manejo de selección de fecha con `DatePickerDialog`
+        // ✅ Manejo de selección de fecha con `DatePickerDialog`
         inputFecha.setOnClickListener {
             val calendario = Calendar.getInstance()
             val year = calendario.get(Calendar.YEAR)
             val month = calendario.get(Calendar.MONTH)
             val day = calendario.get(Calendar.DAY_OF_MONTH)
 
-            val datePicker = DatePickerDialog(requireContext(), { _, año, mes, día ->
-                val fechaSeleccionada = "$día/${mes + 1}/$año" // Formato simple
+            DatePickerDialog(requireContext(), { _, año, mes, día ->
+                val fechaSeleccionada = "$día/${mes + 1}/$año"
                 inputFecha.setText(fechaSeleccionada)
-            }, year, month, day)
-
-            datePicker.show()
+            }, year, month, day).show()
         }
 
-        // 🔥 Guardar cambios incluyendo la fecha seleccionada
+        // ✅ Guardar cambios con validaciones mejoradas
         btnGuardar.setOnClickListener {
             val montoEditado = inputMonto.text.toString().toDoubleOrNull()
-            val descripcionEditada = inputDescripcion.text.toString()
-            val fechaEditada = inputFecha.text.toString()
+            val descripcionEditada = inputDescripcion.text.toString().trim()
+            val fechaEditada = inputFecha.text.toString().trim()
 
-            if (montoEditado == null || montoEditado < 0) {
-                inputMonto.error = "Ingrese un monto válido"
-            } else if (descripcionEditada.isEmpty()) {
-                inputDescripcion.error = "Ingrese una descripción"
-            } else if (fechaEditada.isEmpty()) {
-                inputFecha.error = "Seleccione una fecha"
-            } else {
-                val nuevoGasto = gasto.copy(monto = montoEditado, descripcion = descripcionEditada, fecha = fechaEditada)
-                listener(nuevoGasto)
-                dialog?.dismiss()
+            when {
+                montoEditado == null || montoEditado < 0 -> inputMonto.error = "Ingrese un monto válido"
+                descripcionEditada.isEmpty() -> inputDescripcion.error = "Ingrese una descripción"
+                fechaEditada.isEmpty() -> inputFecha.error = "Seleccione una fecha"
+                else -> {
+                    val nuevoGasto = gasto.copy(monto = montoEditado, descripcion = descripcionEditada, fecha = fechaEditada)
+                    listener(nuevoGasto)
+                    dismiss() // ✅ Cerrar el diálogo al guardar
+                }
             }
         }
 
-        btnCancelar.setOnClickListener { dialog?.dismiss() }
+        // ✅ Cancelar sin cambios
+        btnCancelar.setOnClickListener { dismiss() }
 
         return builder.setView(view).create()
     }

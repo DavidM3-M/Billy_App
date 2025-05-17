@@ -42,7 +42,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnGuardarIngreso"
+        android:id="@+id/btnGuardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Guardar Ingreso"
@@ -52,7 +52,7 @@
         app:cornerRadius="18dp"/> <!-- Bordes más redondeados -->
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCancelarIngreso"
+        android:id="@+id/btnCancelar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cancelar"

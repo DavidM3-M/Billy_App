@@ -17,9 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.billy_app.EditarGastoDialog
 import com.example.billy_app.Model.entities.Gasto
 import com.example.billy_app.R
+import com.example.billy_app.ViewModel.GastoViewModel
 import com.google.android.material.button.MaterialButton
 
-class GastoAdapter(private var gastos: MutableList<Gasto>) : RecyclerView.Adapter<GastoAdapter.ViewHolder>() {
+class GastoAdapter(
+    private var gastos: MutableList<Gasto>,
+    private val viewModel: GastoViewModel // ✅ Se pasa el ViewModel
+) : RecyclerView.Adapter<GastoAdapter.ViewHolder>() {
 
     private var itemSeleccionado: Int = -1 // Índice del ítem expandido (-1 = ninguno)
 
@@ -31,13 +35,10 @@ class GastoAdapter(private var gastos: MutableList<Gasto>) : RecyclerView.Adapte
         val btnEliminar: MaterialButton = itemView.findViewById(R.id.btnEliminarGasto)
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_gasto, parent, false)
         return ViewHolder(view)
     }
-
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val gasto = gastos[position]
@@ -47,7 +48,8 @@ class GastoAdapter(private var gastos: MutableList<Gasto>) : RecyclerView.Adapte
 
         // Controlar visibilidad de los botones sin afectar animaciones
         holder.btnEditar.visibility = if (position == itemSeleccionado) View.VISIBLE else View.GONE
-        holder.btnEliminar.visibility = if (position == itemSeleccionado) View.VISIBLE else View.GONE
+        holder.btnEliminar.visibility =
+            if (position == itemSeleccionado) View.VISIBLE else View.GONE
 
         holder.itemView.setOnClickListener {
             val posicionAnterior = itemSeleccionado
@@ -57,43 +59,29 @@ class GastoAdapter(private var gastos: MutableList<Gasto>) : RecyclerView.Adapte
             notifyItemChanged(position)
         }
 
-        // Configurar botón de eliminar
+        // ✅ Configurar botón de eliminar correctamente
         holder.btnEliminar.setOnClickListener {
-            gastos.removeAt(position)
+            viewModel.eliminarGasto(gasto) // 🗑 Elimina de la base de datos
+            gastos.removeAt(position) // Elimina de la lista visual
             notifyItemRemoved(position)
-            notifyItemRangeChanged(position, gastos.size) // Evita errores de índice al eliminar
+            notifyItemRangeChanged(position, gastos.size)
         }
 
         // Configurar botón de editar sin modificar la animación
         holder.btnEditar.setOnClickListener {
             val dialog = EditarGastoDialog(gasto) { nuevoGasto ->
-                gastos[position] = nuevoGasto
-                notifyItemChanged(position)
+                viewModel.actualizarGasto(nuevoGasto) // ✅ Llamamos la función correcta
+                gastos[position] = nuevoGasto // ✅ Se actualiza en la lista de la UI
+                notifyItemChanged(position) // ✅ Refresca el `RecyclerView`
             }
-            dialog.show((holder.itemView.context as AppCompatActivity).supportFragmentManager, "EditarGastoDialog")
+            dialog.show(
+                (holder.itemView.context as AppCompatActivity).supportFragmentManager,
+                "EditarGastoDialog"
+            )
         }
     }
-
-
-
-    private fun animarVisibilidad(view: View, mostrar: Boolean) {
-        val alphaFinal = if (mostrar) 1f else 0f
-        val translationYFinal = if (mostrar) 0f else -20f // Efecto deslizante
-        val duracion = 300L // Hacemos la animación más rápida para evitar saltos
-
-        view.animate().apply {
-            alpha(alphaFinal)
-            translationY(translationYFinal)
-            duration = duracion
-            interpolator = DecelerateInterpolator()
-            withEndAction { view.visibility = if (mostrar) View.VISIBLE else View.GONE }
-            start()
-        }
-    }
-
 
     override fun getItemCount(): Int = gastos.size
-
 
     fun actualizarLista(nuevosGastos: List<Gasto>) {
         gastos.clear()

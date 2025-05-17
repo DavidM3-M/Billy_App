@@ -1,5 +1,6 @@
 package com.example.billy_app.View
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.example.billy_app.ValidationUtils
 import com.example.billy_app.ViewModel.IngresoViewModel // Cambio de ViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import java.util.Calendar
 
 class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
 
@@ -31,6 +33,18 @@ class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
         val edtMonto = root.findViewById<TextInputEditText>(R.id.ed_monto_ingreso) // Cambio de ID
         val edtFecha = root.findViewById<TextInputEditText>(R.id.ed_fecha_ingreso) // Cambio de ID
         val edtDescripcion = root.findViewById<TextInputEditText>(R.id.ed_descripcion_ingreso) // Cambio de ID
+
+        edtFecha.setOnClickListener {
+            val calendario = Calendar.getInstance()
+            val year = calendario.get(Calendar.YEAR)
+            val month = calendario.get(Calendar.MONTH)
+            val day = calendario.get(Calendar.DAY_OF_MONTH)
+
+            DatePickerDialog(requireContext(), { _, año, mes, día ->
+                val fechaSeleccionada = "$día/${mes + 1}/$año" // ✅ Convierte la fecha a texto
+                edtFecha.setText(fechaSeleccionada) // ✅ Establece la fecha en el campo de texto
+            }, year, month, day).show()
+        }
 
         btnVolver.setOnClickListener {
             findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment) // Cambio en la navegación

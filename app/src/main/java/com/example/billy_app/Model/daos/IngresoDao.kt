@@ -27,4 +27,8 @@ interface IngresoDao {
     @Query("SELECT * FROM ingreso WHERE id = :id")
     fun getByIdIngresos(id: Int): Flow<Ingreso>
 
+    @Query("SELECT SUM(monto) FROM ingreso")
+    fun getTotalIngresos(): LiveData<Double>
+
+
 }

@@ -27,4 +27,9 @@ class IngresoViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun obtenerIngresos(): LiveData<List<Ingreso>> = dao.getAllIngresos() // Cambio de entidad
+
+    fun obtenerTotalIngresos(): LiveData<Double> {
+        return dao.getTotalIngresos()
+    }
+
 }
