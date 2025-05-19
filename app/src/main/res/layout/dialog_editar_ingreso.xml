@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nuevo Monto Ingreso"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="12dp"
+        android:focusable="false">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/inputMontoIngreso"
             android:layout_width="match_parent"

@@ -33,7 +33,7 @@ class IngresosFragment : Fragment() {
 
         recyclerIngresos.layoutManager = LinearLayoutManager(requireContext())
 
-        // ✅ Inicializar `IngresoAdapter` correctamente PASANDO el ViewModel
+
         ingresoAdapter = IngresoAdapter(mutableListOf(), viewModel)
         recyclerIngresos.adapter = ingresoAdapter
 

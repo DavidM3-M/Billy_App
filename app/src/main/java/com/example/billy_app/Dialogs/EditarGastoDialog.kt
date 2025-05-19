@@ -21,6 +21,7 @@ class EditarGastoDialog(
         val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.dialog_editar_gasto, null)
 
+
         val inputMonto = view.findViewById<TextInputEditText>(R.id.inputMonto)
         val inputDescripcion = view.findViewById<TextInputEditText>(R.id.inputDescripcion)
         val inputFecha = view.findViewById<TextInputEditText>(R.id.inputFecha)
@@ -50,6 +51,7 @@ class EditarGastoDialog(
             val montoEditado = inputMonto.text.toString().toDoubleOrNull()
             val descripcionEditada = inputDescripcion.text.toString().trim()
             val fechaEditada = inputFecha.text.toString().trim()
+
 
             when {
                 montoEditado == null || montoEditado < 0 -> inputMonto.error = "Ingrese un monto válido"

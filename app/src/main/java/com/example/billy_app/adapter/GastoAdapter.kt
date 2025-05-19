@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.billy_app.Dialogs.EditarGastoDialog
 import com.example.billy_app.Model.entities.Gasto
@@ -79,5 +80,6 @@ class GastoAdapter(
         gastos.clear()
         gastos.addAll(nuevosGastos)
         notifyDataSetChanged() // Refresca la lista
+
     }
 }

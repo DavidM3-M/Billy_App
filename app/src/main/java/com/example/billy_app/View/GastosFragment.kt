@@ -33,6 +33,8 @@ class GastosFragment : Fragment() {
 
         recyclerGastos.layoutManager = LinearLayoutManager(requireContext())
 
+
+
         // ✅ Inicializar `GastoAdapter` correctamente PASANDO el ViewModel
         gastoAdapter = GastoAdapter(mutableListOf(), viewModel)
         recyclerGastos.adapter = gastoAdapter
