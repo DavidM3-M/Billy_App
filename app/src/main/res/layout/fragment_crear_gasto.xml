@@ -89,11 +89,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:layout_height="150dp"
+        android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:layout_gravity="bottom">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCrearGasto"
@@ -104,7 +104,7 @@
             android:backgroundTint="#00796B"
             android:text="Registrar gasto"
             android:textColor="#FFFFFF"
-            app:cornerRadius="15dp"/>
+            app:cornerRadius="15dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVolverInicio"
@@ -115,7 +115,7 @@
             android:backgroundTint="#F44336"
             android:text="Volver"
             android:textColor="#FFFFFF"
-            app:cornerRadius="15dp"/>
+            app:cornerRadius="15dp" />
     </LinearLayout>
 
 </FrameLayout>
