@@ -1,4 +1,4 @@
-package com.example.billy_app.Validations
+package com.example.billy_app.Utils
 
 import android.content.Context
 import android.widget.Toast

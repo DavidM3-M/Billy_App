@@ -57,6 +57,7 @@
                 android:layout_marginTop="10dp"
                 android:hint="Fecha del ingreso"
                 app:boxBackgroundMode="filled"
+                android:focusable="true"
                 app:boxBackgroundColor="#FFFFFF">
 
                 <com.google.android.material.textfield.TextInputEditText
