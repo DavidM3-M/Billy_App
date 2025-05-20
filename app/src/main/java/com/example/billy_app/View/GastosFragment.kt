@@ -41,7 +41,12 @@ class GastosFragment : Fragment() {
 
         // ✅ Observar cambios en los datos y actualizar el adaptador
         viewModel.gastos.observe(viewLifecycleOwner) { nuevosGastos ->
-            gastoAdapter.actualizarLista(nuevosGastos.toMutableList()) // Sincroniza UI con datos reales
+            val scrollPos = (recyclerGastos.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+            val gastosOrdenados = nuevosGastos.reversed()
+            gastoAdapter.actualizarLista(gastosOrdenados.toMutableList())
+
+            recyclerGastos.scrollToPosition(scrollPos) // 🔥 Restaura la posición del scroll
         }
 
         btnVolver.setOnClickListener {

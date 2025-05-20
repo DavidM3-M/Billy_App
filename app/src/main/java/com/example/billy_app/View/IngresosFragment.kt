@@ -39,7 +39,12 @@ class IngresosFragment : Fragment() {
 
         // ✅ Observar cambios en los datos y actualizar el adaptador
         viewModel.ingresos.observe(viewLifecycleOwner) { nuevosIngresos ->
-            ingresoAdapter.actualizarLista(nuevosIngresos.toMutableList()) // Sincroniza UI con datos reales
+            val scrollPos = (recyclerIngresos.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+            val ingresosInvertidos = nuevosIngresos.reversed() // 🔥 Coloca el último ingreso primero
+            ingresoAdapter.actualizarLista(ingresosInvertidos.toMutableList()) // Sincroniza UI con datos reales
+
+            recyclerIngresos.scrollToPosition(scrollPos)
         }
 
         btnVolver.setOnClickListener {
