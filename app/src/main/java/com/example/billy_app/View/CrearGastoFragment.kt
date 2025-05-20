@@ -17,7 +17,7 @@ import com.example.billy_app.ViewModel.GastoViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.util.Calendar
-
+import androidx.activity.OnBackPressedCallback
 
 class CrearGastoFragment : Fragment() {
 
@@ -42,7 +42,6 @@ class CrearGastoFragment : Fragment() {
             }
         }
 
-
         btnVolver.setOnClickListener {
             findNavController().navigate(R.id.action_crearGastoFragment_to_inicioFragment)
         }
@@ -52,6 +51,16 @@ class CrearGastoFragment : Fragment() {
         }
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.action_crearGastoFragment_to_inicioFragment) // 🔥 Vuelve al inicio cuando el usuario presione "Atrás"
+            }
+        })
     }
 
     private fun guardarGasto(edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText) {
@@ -79,6 +88,4 @@ class CrearGastoFragment : Fragment() {
 
         findNavController().navigate(R.id.action_crearGastoFragment_to_inicioFragment)
     }
-
-
 }

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,11 +14,11 @@ import com.example.billy_app.R
 import com.example.billy_app.ViewModel.IngresoViewModel
 import com.example.billy_app.adapter.IngresoAdapter
 import com.google.android.material.button.MaterialButton
-
+import androidx.activity.OnBackPressedCallback
 
 class IngresosFragment : Fragment() {
 
-    private val viewModel: IngresoViewModel by viewModels() // ✅ Se usa un solo ViewModel
+    private val viewModel: IngresoViewModel by viewModels()
     private lateinit var ingresoAdapter: IngresoAdapter
 
     override fun onCreateView(
@@ -34,20 +33,17 @@ class IngresosFragment : Fragment() {
 
         recyclerIngresos.layoutManager = LinearLayoutManager(requireContext())
 
-
         ingresoAdapter = IngresoAdapter(mutableListOf(), viewModel)
         recyclerIngresos.adapter = ingresoAdapter
 
-        // ✅ Observar cambios en los datos y actualizar el adaptador
         viewModel.ingresos.observe(viewLifecycleOwner) { nuevosIngresos ->
             val scrollPos = (recyclerIngresos.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-            val total = nuevosIngresos.sumOf { it.monto } // 🔥 Suma los ingresos
+            val total = nuevosIngresos.sumOf { it.monto }
             val txtTotalIngresos = view?.findViewById<TextView>(R.id.txtTotalIngresos)
 
-            val ingresosInvertidos = nuevosIngresos.reversed() // 🔥 Coloca el último ingreso primero
-            ingresoAdapter.actualizarLista(ingresosInvertidos.toMutableList()) // Sincroniza UI con datos reales
+            val ingresosInvertidos = nuevosIngresos.reversed()
+            ingresoAdapter.actualizarLista(ingresosInvertidos.toMutableList())
             txtTotalIngresos?.text = "$$total"
-
 
             recyclerIngresos.scrollToPosition(scrollPos)
         }
@@ -61,5 +57,15 @@ class IngresosFragment : Fragment() {
         }
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.action_ingresosFragment_to_inicioFragment) // 🔥 Vuelve al inicio
+            }
+        })
     }
 }

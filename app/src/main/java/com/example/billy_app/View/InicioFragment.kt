@@ -12,7 +12,7 @@ import com.example.billy_app.R
 import com.example.billy_app.ViewModel.GastoViewModel
 import com.example.billy_app.ViewModel.IngresoViewModel
 import com.google.android.material.button.MaterialButton
-
+import androidx.activity.OnBackPressedCallback
 
 class InicioFragment : Fragment() {
 
@@ -22,12 +22,12 @@ class InicioFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val root = inflater.inflate(R.layout.fragment_inicio, container, false)
 
         val btnIngresos = root.findViewById<MaterialButton>(R.id.btnIngresos)
         val btnGastos = root.findViewById<MaterialButton>(R.id.btnGastos)
-        val txtBalance = root.findViewById<TextView>(R.id.textViewTotal) // Agregar este ID en el XML
+        val txtBalance = root.findViewById<TextView>(R.id.textViewTotal)
 
         btnIngresos.setOnClickListener {
             findNavController().navigate(R.id.action_inicioFragment_to_ingresosFragment)
@@ -37,7 +37,7 @@ class InicioFragment : Fragment() {
             findNavController().navigate(R.id.action_inicioFragment_to_gastosFragment)
         }
 
-        // ✅ Observar los ingresos y gastos para actualizar el balance dinámicamente
+        // ✅ Observar ingresos y gastos para actualizar el balance dinámicamente
         ingresoViewModel.obtenerTotalIngresos().observe(viewLifecycleOwner) { totalIngresos ->
             gastoViewModel.obtenerTotalGastos().observe(viewLifecycleOwner) { totalGastos ->
                 val balance = (totalIngresos ?: 0.0) - (totalGastos ?: 0.0)
@@ -46,5 +46,16 @@ class InicioFragment : Fragment() {
         }
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // 🔥 Implementación para cerrar la app cuando el usuario presione "Atrás"
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish() // 🔥 Cierra la app completamente
+            }
+        })
     }
 }

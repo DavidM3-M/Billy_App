@@ -9,31 +9,32 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.billy_app.Model.entities.Ingreso // Cambio de entidad
+import com.example.billy_app.Model.entities.Ingreso
 import com.example.billy_app.R
 import com.example.billy_app.Utils.DateUtils.DateUtils
 import com.example.billy_app.Utils.ValidationUtils
-import com.example.billy_app.ViewModel.IngresoViewModel // Cambio de ViewModel
+import com.example.billy_app.ViewModel.IngresoViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.util.Calendar
+import androidx.activity.OnBackPressedCallback
 
-class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
+class CrearIngresoFragment : Fragment() {
 
-    private val viewModel: IngresoViewModel by viewModels() // Cambio de ViewModel
+    private val viewModel: IngresoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val root = inflater.inflate(R.layout.fragment_crear_ingreso, container, false) // Cambio de layout
+        val root = inflater.inflate(R.layout.fragment_crear_ingreso, container, false)
 
         val btnVolver = root.findViewById<MaterialButton>(R.id.btnVolverInicio)
-        val btnGuardar = root.findViewById<MaterialButton>(R.id.btnCrearIngreso) // Cambio de ID
+        val btnGuardar = root.findViewById<MaterialButton>(R.id.btnCrearIngreso)
 
-        val edtMonto = root.findViewById<TextInputEditText>(R.id.ed_monto_ingreso) // Cambio de ID
-        val edtFecha = root.findViewById<TextInputEditText>(R.id.ed_fecha_ingreso) // Cambio de ID
-        val edtDescripcion = root.findViewById<TextInputEditText>(R.id.ed_descripcion_ingreso) // Cambio de ID
+        val edtMonto = root.findViewById<TextInputEditText>(R.id.ed_monto_ingreso)
+        val edtFecha = root.findViewById<TextInputEditText>(R.id.ed_fecha_ingreso)
+        val edtDescripcion = root.findViewById<TextInputEditText>(R.id.ed_descripcion_ingreso)
 
         edtFecha.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -42,7 +43,7 @@ class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
         }
 
         btnVolver.setOnClickListener {
-            findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment) // Cambio en la navegación
+            findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment)
         }
 
         btnGuardar.setOnClickListener {
@@ -52,10 +53,19 @@ class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment) // 🔥 Vuelve al inicio cuando el usuario presione "Atrás"
+            }
+        })
+    }
+
     private fun guardarIngreso(edtMonto: TextInputEditText, edtFecha: TextInputEditText, edtDescripcion: TextInputEditText) {
         val montoStr = edtMonto.text.toString().trim()
 
-        // ✅ Validación mejorada para evitar textos no numéricos
         if (montoStr.isBlank() || montoStr.toDoubleOrNull() == null) {
             Toast.makeText(requireContext(), "⚠️ El monto debe ser un número válido", Toast.LENGTH_SHORT).show()
             return
@@ -65,7 +75,6 @@ class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
         val fecha = edtFecha.text.toString().trim()
         val descripcion = edtDescripcion.text.toString().trim()
 
-        // ✅ Validar con `ValidationUtils`
         val mensajeError = ValidationUtils.validarCampos(montoStr, fecha, descripcion, requireContext())
 
         if (mensajeError != null) {
@@ -79,8 +88,4 @@ class CrearIngresoFragment : Fragment() { // Cambio de nombre de la clase
 
         findNavController().navigate(R.id.action_crearIngresoFragment_to_inicioFragment)
     }
-
-
-
-
 }

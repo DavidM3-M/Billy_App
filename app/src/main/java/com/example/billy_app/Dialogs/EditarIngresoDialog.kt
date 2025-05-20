@@ -1,15 +1,15 @@
 package com.example.billy_app.Dialogs
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.example.billy_app.Model.entities.Ingreso // Cambio de entidad
+import com.example.billy_app.Model.entities.Ingreso
 import com.example.billy_app.R
+import com.example.billy_app.Utils.ValidationUtils.validarCampos
+import com.example.billy_app.Utils.DateUtils.DateUtils.mostrarDatePicker
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import java.util.Calendar
 
 class EditarIngresoDialog(
     private val ingreso: Ingreso,
@@ -32,35 +32,27 @@ class EditarIngresoDialog(
         inputDescripcion.setText(ingreso.descripcion)
         inputFecha.setText(ingreso.fecha)
 
-        // ✅ Manejo de selección de fecha con `DatePickerDialog`
+        // ✅ Manejo de selección de fecha con `mostrarDatePicker()`
         inputFecha.setOnClickListener {
-            val calendario = Calendar.getInstance()
-            val year = calendario.get(Calendar.YEAR)
-            val month = calendario.get(Calendar.MONTH)
-            val day = calendario.get(Calendar.DAY_OF_MONTH)
-
-            DatePickerDialog(requireContext(), { _, año, mes, día ->
-                val fechaSeleccionada = "$día/${mes + 1}/$año"
-                inputFecha.setText(fechaSeleccionada)
-            }, year, month, day).show()
+            mostrarDatePicker(requireContext(), inputFecha)
         }
 
-        // ✅ Guardar cambios con validaciones mejoradas
+        // ✅ Validar antes de guardar cambios
         btnGuardar.setOnClickListener {
-            val montoEditado = inputMonto.text.toString().toDoubleOrNull()
-            val descripcionEditada = inputDescripcion.text.toString().trim()
+            val montoStr = inputMonto.text.toString().trim()
             val fechaEditada = inputFecha.text.toString().trim()
+            val descripcionEditada = inputDescripcion.text.toString().trim()
 
-            when {
-                montoEditado == null || montoEditado < 0 -> inputMonto.error = "Ingrese un monto válido"
-                descripcionEditada.isEmpty() -> inputDescripcion.error = "Ingrese una descripción"
-                fechaEditada.isEmpty() -> inputFecha.error = "Seleccione una fecha"
-                else -> {
-                    val nuevoIngreso = ingreso.copy(monto = montoEditado, descripcion = descripcionEditada, fecha = fechaEditada)
-                    listener(nuevoIngreso)
-                    dismiss() // ✅ Cerrar el diálogo al guardar
-                }
+            val mensajeError = validarCampos(montoStr, fechaEditada, descripcionEditada, requireContext())
+
+            if (mensajeError != null) {
+                return@setOnClickListener // 🔥 Evita guardar si hay errores
             }
+
+            val montoEditado = montoStr.toDouble()
+            val nuevoIngreso = ingreso.copy(monto = montoEditado, descripcion = descripcionEditada, fecha = fechaEditada)
+            listener(nuevoIngreso)
+            dismiss() // ✅ Cerrar el diálogo al guardar
         }
 
         // ✅ Cancelar sin cambios

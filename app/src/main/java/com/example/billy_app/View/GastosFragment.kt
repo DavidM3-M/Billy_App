@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,11 +14,11 @@ import com.example.billy_app.R
 import com.example.billy_app.ViewModel.GastoViewModel
 import com.example.billy_app.adapter.GastoAdapter
 import com.google.android.material.button.MaterialButton
-
+import androidx.activity.OnBackPressedCallback
 
 class GastosFragment : Fragment() {
 
-    private val viewModel: GastoViewModel by viewModels() // ✅ Se usa un solo ViewModel
+    private val viewModel: GastoViewModel by viewModels()
     private lateinit var gastoAdapter: GastoAdapter
 
     override fun onCreateView(
@@ -34,23 +33,19 @@ class GastosFragment : Fragment() {
 
         recyclerGastos.layoutManager = LinearLayoutManager(requireContext())
 
-
-
-        // ✅ Inicializar `GastoAdapter` correctamente PASANDO el ViewModel
         gastoAdapter = GastoAdapter(mutableListOf(), viewModel)
         recyclerGastos.adapter = gastoAdapter
 
-        // ✅ Observar cambios en los datos y actualizar el adaptador
         viewModel.gastos.observe(viewLifecycleOwner) { nuevosGastos ->
             val scrollPos = (recyclerGastos.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val gastosOrdenados = nuevosGastos.reversed()
-            val total = nuevosGastos.sumOf { it.monto } // 🔥 Suma los gastos
+            val total = nuevosGastos.sumOf { it.monto }
             val txtTotalGastos = view?.findViewById<TextView>(R.id.txtTotalGastos)
 
             gastoAdapter.actualizarLista(gastosOrdenados.toMutableList())
             txtTotalGastos?.text = "$$total"
 
-            recyclerGastos.scrollToPosition(scrollPos) // 🔥 Restaura la posición del scroll
+            recyclerGastos.scrollToPosition(scrollPos)
         }
 
         btnVolver.setOnClickListener {
@@ -62,5 +57,15 @@ class GastosFragment : Fragment() {
         }
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.action_gastosFragment_to_inicioFragment) // 🔥 Vuelve al inicio cuando el usuario presione "Atrás"
+            }
+        })
     }
 }
