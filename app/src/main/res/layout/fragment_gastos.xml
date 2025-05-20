@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,21 +7,51 @@
     android:background="@color/black"
     tools:context=".View.GastosFragment">
 
-    <!-- Contenedor principal con alineación hacia abajo -->
+    <!-- Contenedor superior para el total centrado -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        android:layout_marginTop="150dp"> <!-- 🔥 Separa del borde superior -->
+
+        <TextView
+            android:id="@+id/txtTotalTituloGastos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Gastos"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/txtTotalGastos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0"
+            android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- Contenedor inferior con el ScrollView y RecyclerView -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp"
-        android:gravity="bottom"> <!-- Empuja contenido hacia abajo -->
+        android:gravity="bottom">
 
-        <!-- ScrollView para limitar el crecimiento del RecyclerView -->
+        <!-- ScrollView para limitar el tamaño del RecyclerView -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:descendantFocusability="blocksDescendants">
 
-        <androidx.recyclerview.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerGastos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

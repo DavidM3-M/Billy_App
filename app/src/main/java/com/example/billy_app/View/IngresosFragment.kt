@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -40,9 +41,13 @@ class IngresosFragment : Fragment() {
         // ✅ Observar cambios en los datos y actualizar el adaptador
         viewModel.ingresos.observe(viewLifecycleOwner) { nuevosIngresos ->
             val scrollPos = (recyclerIngresos.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            val total = nuevosIngresos.sumOf { it.monto } // 🔥 Suma los ingresos
+            val txtTotalIngresos = view?.findViewById<TextView>(R.id.txtTotalIngresos)
 
             val ingresosInvertidos = nuevosIngresos.reversed() // 🔥 Coloca el último ingreso primero
             ingresoAdapter.actualizarLista(ingresosInvertidos.toMutableList()) // Sincroniza UI con datos reales
+            txtTotalIngresos?.text = "$$total"
+
 
             recyclerIngresos.scrollToPosition(scrollPos)
         }

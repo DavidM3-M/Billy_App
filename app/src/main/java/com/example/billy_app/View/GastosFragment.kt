@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -42,9 +43,12 @@ class GastosFragment : Fragment() {
         // ✅ Observar cambios en los datos y actualizar el adaptador
         viewModel.gastos.observe(viewLifecycleOwner) { nuevosGastos ->
             val scrollPos = (recyclerGastos.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-
             val gastosOrdenados = nuevosGastos.reversed()
+            val total = nuevosGastos.sumOf { it.monto } // 🔥 Suma los gastos
+            val txtTotalGastos = view?.findViewById<TextView>(R.id.txtTotalGastos)
+
             gastoAdapter.actualizarLista(gastosOrdenados.toMutableList())
+            txtTotalGastos?.text = "$$total"
 
             recyclerGastos.scrollToPosition(scrollPos) // 🔥 Restaura la posición del scroll
         }
